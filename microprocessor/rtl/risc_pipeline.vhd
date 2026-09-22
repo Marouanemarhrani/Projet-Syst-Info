@@ -26,6 +26,16 @@ architecture rtl of risc_pipeline is
   signal memwb_op,memwb_a : integer range 0 to 255 := 0;
   signal memwb_value : std_logic_vector(7 downto 0) := (others=>'0');
   signal memwb_valid : std_logic := '0';
+  function dependency(prod_op,prod_dest,cons_op,src_a,src_b,src_c: integer) return boolean is
+  begin
+    if not (prod_op=1 or prod_op=2 or prod_op=3 or prod_op=4 or prod_op=5 or prod_op=6 or prod_op=7 or prod_op=11 or prod_op=12 or prod_op=13) then return false; end if;
+    case cons_op is
+      when 1|2|3|4|11|12|13 => return prod_dest=src_b or prod_dest=src_c;
+      when 5|8 => return prod_dest=src_b;
+      when 10 => return prod_dest=src_a;
+      when others => return false;
+    end case;
+  end function;
 begin
   result_out <= regs(4);
 
@@ -43,7 +53,7 @@ begin
         if memwb_valid='1' and (memwb_op=1 or memwb_op=2 or memwb_op=3 or memwb_op=4 or memwb_op=5 or memwb_op=6 or memwb_op=7 or memwb_op=11 or memwb_op=12 or memwb_op=13) then
           regs(memwb_a) <= memwb_value;
         end if;
-        memwb_valid <= exmem_valid; memwb_op<=exmem_op; memwb_a<=exmem_a; if exmem_op=7 then memwb_a<=exmem_b; end if;
+        memwb_valid <= exmem_valid; memwb_op<=exmem_op; memwb_a<=exmem_a;
         if exmem_valid='1' and exmem_op=8 then
           data(exmem_a) <= exmem_store; memwb_value <= exmem_store;
         elsif exmem_valid='1' and exmem_op=7 then
@@ -74,8 +84,13 @@ begin
         if idex_valid='1' and idex_op=9 then pc<=idex_a; ifid_valid<='0'; end if;
         if idex_valid='1' and idex_op=10 and unsigned(idex_va)=to_unsigned(0,8) then pc<=idex_b; ifid_valid<='0'; end if;
         stall:=false;
-        if ifid_valid='1' and idex_valid='1' and (idex_op=1 or idex_op=2 or idex_op=3 or idex_op=4 or idex_op=5 or idex_op=6 or idex_op=7) then
-          if (ifid(23 downto 20)=std_logic_vector(to_unsigned(idex_a,4))) or (ifid(19 downto 16)=std_logic_vector(to_unsigned(idex_a,4))) then stall:=true; end if;
+        op:=to_integer(unsigned(ifid(31 downto 24)));
+        b:=to_integer(unsigned(ifid(15 downto 8)));
+        c:=to_integer(unsigned(ifid(7 downto 0)));
+        if ifid_valid='1' then
+          if dependency(idex_op,idex_a,op,a,b,c) and idex_valid='1' then stall:=true; end if;
+          if dependency(exmem_op,exmem_a,op,a,b,c) and exmem_valid='1' then stall:=true; end if;
+          if dependency(memwb_op,memwb_a,op,a,b,c) and memwb_valid='1' then stall:=true; end if;
         end if;
         if stall then
           idex_valid<='0';

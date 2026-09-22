@@ -32,3 +32,6 @@ bin/
 
 !compiler/interpreter/interpreter.c
 !compiler/interpreter/
+
+work-obj*.cf
+risc_pipeline_tb
