@@ -31,7 +31,7 @@
 - [x] Chemin de données et contrôle
 - [x] Pipeline 5 étages
 - [x] Instructions arithmétiques, COP, AFC, LOAD, STORE
-- [x] Extension saut/comparaison
+- [ ] Extension saut/comparaison dans le RTL (présente dans le format cross-assemblé, à finaliser matériellement)
 - [x] Détection simple des aléas
 - [ ] Synthèse Xilinx et mesure fréquence/consommation
 
@@ -39,4 +39,6 @@
 
 - [x] Tests logiciel
 - [x] Programme RISC de démonstration
-- [x] Testbench VHDL
+- [ ] Simulation du testbench VHDL (GHDL absent dans l'environnement)
+- [x] Pointeurs côté compilateur/interpréteur/cross-assembleur
+- [ ] Fonctions utilisateur (extension facultative du sujet)

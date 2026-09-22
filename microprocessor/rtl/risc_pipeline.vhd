@@ -40,19 +40,19 @@ begin
         pc<=0; ifid_valid<='0'; idex_valid<='0'; exmem_valid<='0'; memwb_valid<='0';
         regs<=(others=>(others=>'0')); data<=(others=>(others=>'0'));
       else
-        if memwb_valid='1' and (memwb_op=1 or memwb_op=2 or memwb_op=3 or memwb_op=4 or memwb_op=5 or memwb_op=6 or memwb_op=7) then
+        if memwb_valid='1' and (memwb_op=1 or memwb_op=2 or memwb_op=3 or memwb_op=4 or memwb_op=5 or memwb_op=6 or memwb_op=7 or memwb_op=11 or memwb_op=12 or memwb_op=13) then
           regs(memwb_a) <= memwb_value;
         end if;
-        memwb_valid <= exmem_valid; memwb_op<=exmem_op; memwb_a<=exmem_a;
+        memwb_valid <= exmem_valid; memwb_op<=exmem_op; memwb_a<=exmem_a; if exmem_op=7 then memwb_a<=exmem_b; end if;
         if exmem_valid='1' and exmem_op=8 then
           data(exmem_a) <= exmem_store; memwb_value <= exmem_store;
         elsif exmem_valid='1' and exmem_op=7 then
-          memwb_value <= data(exmem_a);
+          memwb_value <= data(exmem_b);
         else
           memwb_value <= exmem_value;
         end if;
 
-        exmem_valid<=idex_valid; exmem_op<=idex_op; exmem_a<=idex_a;
+        exmem_valid<=idex_valid; exmem_op<=idex_op; exmem_a<=idex_a; exmem_b<=idex_b;
         exmem_store<=idex_vb; exmem_value<=(others=>'0');
         alu_value:=0;
         if idex_valid='1' then
@@ -63,13 +63,18 @@ begin
             when 4 => if unsigned(idex_vb)=0 then alu_value:=0; else alu_value:=to_integer(unsigned(idex_va))/to_integer(unsigned(idex_vb)); end if;
             when 5 => alu_value:=to_integer(unsigned(idex_vb));
             when 6 => alu_value:=idex_b;
+            when 11 => if unsigned(idex_va) < unsigned(idex_vb) then alu_value:=1; else alu_value:=0; end if;
+            when 12 => if unsigned(idex_va) > unsigned(idex_vb) then alu_value:=1; else alu_value:=0; end if;
+            when 13 => if unsigned(idex_va) = unsigned(idex_vb) then alu_value:=1; else alu_value:=0; end if;
             when others => null;
           end case;
-          if idex_op<=6 then exmem_value<=std_logic_vector(to_unsigned((alu_value mod 256 + 256) mod 256,8)); end if;
+          if (idex_op<=6 or (idex_op>=11 and idex_op<=13)) then exmem_value<=std_logic_vector(to_unsigned((alu_value mod 256 + 256) mod 256,8)); end if;
         end if;
 
+        if idex_valid='1' and idex_op=9 then pc<=idex_a; ifid_valid<='0'; end if;
+        if idex_valid='1' and idex_op=10 and unsigned(idex_va)=to_unsigned(0,8) then pc<=idex_b; ifid_valid<='0'; end if;
         stall:=false;
-        if ifid_valid='1' and idex_valid='1' and idex_op in (1,2,3,4,5,6,7) then
+        if ifid_valid='1' and idex_valid='1' and (idex_op=1 or idex_op=2 or idex_op=3 or idex_op=4 or idex_op=5 or idex_op=6 or idex_op=7) then
           if (ifid(23 downto 20)=std_logic_vector(to_unsigned(idex_a,4))) or (ifid(19 downto 16)=std_logic_vector(to_unsigned(idex_a,4))) then stall:=true; end if;
         end if;
         if stall then
@@ -79,7 +84,7 @@ begin
           op:=to_integer(unsigned(ifid(31 downto 24))); a:=to_integer(unsigned(ifid(23 downto 16))); b:=to_integer(unsigned(ifid(15 downto 8))); c:=to_integer(unsigned(ifid(7 downto 0)));
           idex_op<=op; idex_a<=a; idex_b<=b; idex_c<=c; idex_va<=regs(b); idex_vb<=regs(c);
           if op=6 then idex_vb<=std_logic_vector(to_unsigned(b,8)); end if;
-          if op=7 then idex_va<=regs(a); idex_a<=b; end if;
+          if op=7 then idex_b<=b; elsif op=8 then idex_vb<=regs(b); end if;
         end if;
         if not stall then decoded:=program(pc); ifid<=decoded; ifid_valid<='1'; if pc<255 then pc<=pc+1; end if; end if;
       end if;

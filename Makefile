@@ -14,6 +14,9 @@ bin/interpreter: compiler/interpreter/interpreter.c | build
 test: all
 	bin/compiler tests/fixtures/control.c build/control >/dev/null
 	bin/interpreter build/control.obj | diff -u tests/expected/control.txt -
+	bin/compiler tests/fixtures/pointer.c build/pointer >/dev/null
+	bin/interpreter build/pointer.obj | diff -u tests/expected/pointer.txt -
+	python3 compiler/assembler/cross_assembler.py build/pointer.obj build/pointer.hex >/dev/null
 clean:
 	rm -rf build bin
 
