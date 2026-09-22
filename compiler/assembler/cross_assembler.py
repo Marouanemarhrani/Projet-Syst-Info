@@ -3,13 +3,13 @@
 import argparse
 from pathlib import Path
 MEM_NAMES={1:"ADD",2:"MUL",3:"SOU",4:"DIV",5:"COP",6:"AFC",7:"JMP",8:"JMF",9:"INF",10:"SUP",11:"EQU",12:"PRI",13:"ADR",14:"LDP",15:"STP"}
-RISC_NAMES={1:"ADD",2:"MUL",3:"SOU",4:"DIV",5:"COP",6:"AFC",7:"LOAD",8:"STORE",9:"JMP",10:"JMF",11:"INF",12:"SUP",13:"EQU",14:"PRI",18:"LDIND",19:"STIND"}
+RISC_NAMES={1:"ADD",2:"MUL",3:"SOU",4:"DIV",5:"COP",6:"AFC",7:"LOAD",8:"STORE",9:"JMP",10:"JMF",11:"INF",12:"SUP",13:"EQU",14:"PRI",18:"LDIND",19:"STIND",20:"CALL",21:"RET"}
 def read_memory(path):
     rows=[]
     for line_no,line in enumerate(Path(path).read_text().splitlines(),1):
         if line.strip(): rows.append((line_no,[int(x) for x in line.split()]))
     return rows
-def size(v): return 2 if v[0] in (5,6,12,13,14,15) else 1 if v[0] in (7,8) else 4
+def size(v): return 2 if v[0] in (5,6,12,13,14,15) else 1 if v[0] in (7,8,16,17) else 4
 def assemble(rows):
     starts={}; pc=0
     for i,(_,v) in enumerate(rows): starts[i]=pc; pc+=size(v)
@@ -30,6 +30,8 @@ def assemble(rows):
         elif op==13: emit(6,1,b); emit(8,a,1)
         elif op==14: emit(7,1,b); emit(18,1,1)
         elif op==15: emit(7,1,a); emit(7,2,b); emit(19,1,2)
+        elif op==16: emit(20,a,starts.get(b,b))
+        elif op==17: emit(21,a)
         else: raise ValueError(f"opcode mémoire inconnu: {op}")
     return out
 def write_outputs(program,asm_path,hex_path):
