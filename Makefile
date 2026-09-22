@@ -33,7 +33,10 @@ cross: all
 	python3 compiler/assembler/cross_assembler.py build/control.obj build/control.hex
 
 hardware-test:
-	@command -v ghdl >/dev/null || (echo "ghdl absent: RTL prête pour simulation Vivado/GHDL"; exit 0)
-	ghdl -a --std=08 microprocessor/rtl/*.vhd microprocessor/tb/*.vhd
-	ghdl -e --std=08 risc_pipeline_tb
-	ghdl -r --std=08 risc_pipeline_tb --assert-level=error
+	@if command -v ghdl >/dev/null; then \
+		ghdl -a --std=08 microprocessor/rtl/*.vhd microprocessor/tb/*.vhd && \
+		ghdl -e --std=08 risc_pipeline_tb && \
+		ghdl -r --std=08 risc_pipeline_tb --assert-level=error; \
+	else \
+		echo "ghdl absent: RTL prête pour simulation Vivado/GHDL"; \
+	fi
