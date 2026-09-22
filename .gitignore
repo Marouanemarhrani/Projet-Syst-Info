@@ -10,7 +10,6 @@ y.tab.h
 *.a
 
 # Executables
-compiler
 interpreter
 assembler
 
@@ -25,3 +24,11 @@ assembler
 # OS files
 .DS_Store
 Thumbs.db
+
+build/
+bin/
+*.asm
+*.obj
+
+!compiler/interpreter/interpreter.c
+!compiler/interpreter/
