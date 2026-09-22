@@ -9,9 +9,9 @@ y.tab.h
 *.exe
 *.a
 
-# Executables
-interpreter
-assembler
+# Executables generated at repository root
+/interpreter
+/assembler
 
 # Temporary files
 *.tmp
