@@ -1,0 +1,27 @@
+# Generated compiler files
+lex.yy.c
+y.tab.c
+y.tab.h
+
+# Compiled files
+*.o
+*.out
+*.exe
+*.a
+
+# Executables
+compiler
+interpreter
+assembler
+
+# Temporary files
+*.tmp
+*.swp
+*~
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
