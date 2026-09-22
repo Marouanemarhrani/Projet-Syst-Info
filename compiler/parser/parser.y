@@ -22,8 +22,8 @@ static void writeout(){char a[512],b[512];snprintf(a,512,"%s.asm",out);snprintf(
 %token <id> IDENTIFIER
 %token <number> NUMBER
 %token EQ
-%nonassoc LOWER_THAN_ELSE
-%nonassoc ELSE
+%precedence LOWER_THAN_ELSE
+%precedence ELSE
 %left '+' '-'
 %left '*' '/'
 %nonassoc '<' '>' EQ

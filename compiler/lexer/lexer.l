@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 %}
-%option noyywrap yylineno nodefault
+%option noyywrap yylineno nodefault noinput nounput
 ID [A-Za-z][A-Za-z0-9_]*
 NUM ([0-9]+(\.[0-9]*)?|\.[0-9]+)([eE][+-]?[0-9]+)?
 %%
