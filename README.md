@@ -1,4 +1,4 @@
-# Projet Systèmes Informatiques — Du compilateur vers le microprocesseur
+# Projet Systèmes Informatiques : Du compilateur vers le microprocesseur
 
 Compilateur Flex/Bison d'un sous-ensemble du C vers un assembleur orienté mémoire, avec interpréteur du format numérique généré.
 

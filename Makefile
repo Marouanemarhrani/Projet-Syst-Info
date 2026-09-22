@@ -20,6 +20,11 @@ test: all
 	bin/compiler tests/fixtures/function.c build/function >/dev/null
 	bin/interpreter build/function.obj | diff -u tests/expected/function.txt -
 	python3 compiler/assembler/cross_assembler.py build/function.obj build/function.hex >/dev/null
+	bin/compiler tests/fixtures/expressions.c build/expressions >/dev/null
+	bin/interpreter build/expressions.obj | diff -u tests/expected/expressions.txt -
+	if bin/compiler tests/fixtures/invalid_constant.c build/invalid_constant >/dev/null 2>&1; then echo "Une affectation de constante a été acceptée"; exit 1; fi
+	bin/compiler tests/fixtures/division_zero.c build/division_zero >/dev/null
+	if bin/interpreter build/division_zero.obj >/dev/null 2>&1; then echo "Une division par zéro a été acceptée"; exit 1; fi
 clean:
 	rm -rf build bin
 
