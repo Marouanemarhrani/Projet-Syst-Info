@@ -14,3 +14,17 @@ Prérequis : gcc, flex, bison et make.
     make test
 
 Le fichier ASM est lisible par un humain et le OBJ contient les instructions numériques exécutées par l'interpréteur.
+
+
+## Volet RISC et matériel
+
+Le cross-assembleur et les sources VHDL sont dans `compiler/assembler/` et
+`microprocessor/`. Pour générer le programme RISC :
+
+    make cross
+
+Pour lancer la simulation si GHDL est installé :
+
+    make hardware-test
+
+La checklist détaillée du sujet est disponible dans `docs/TP_CHECKLIST.md`.
