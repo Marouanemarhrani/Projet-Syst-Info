@@ -22,6 +22,8 @@ static void writeout(){char a[512],b[512];snprintf(a,512,"%s.asm",out);snprintf(
 %token <id> IDENTIFIER
 %token <number> NUMBER
 %token EQ
+%nonassoc LOWER_THAN_ELSE
+%nonassoc ELSE
 %left '+' '-'
 %left '*' '/'
 %nonassoc '<' '>' EQ
@@ -46,7 +48,7 @@ statement: ';'
 | IDENTIFIER '=' expression ';' {int i=find($1);if(i<0)bad("identificateur inconnu");else if(syms[i].c)bad("affectation d'une constante");else emit(COP,syms[i].a,$3,0);free($1);}
 | PRINTF '(' expression ')' ';' {emit(PRI,$3,0,0);}
 | '{' statements '}'
-| ifhead statement {code[$1].b=nc;}
+| ifhead statement %prec LOWER_THAN_ELSE {code[$1].b=nc;}
 | ifhead statement elsejump statement {code[$1].b=$3;code[$3].a=nc;}
 | whilehead statement {emit(JMP,loop_start,0,0);code[$1].b=nc;};
 ifhead: IF '(' expression ')' {$$=emit(JMF,$3,-1,0);};
