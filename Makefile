@@ -17,6 +17,9 @@ test: all
 	bin/compiler tests/fixtures/pointer.c build/pointer >/dev/null
 	bin/interpreter build/pointer.obj | diff -u tests/expected/pointer.txt -
 	python3 compiler/assembler/cross_assembler.py build/pointer.obj build/pointer.hex >/dev/null
+	bin/compiler tests/fixtures/function.c build/function >/dev/null
+	bin/interpreter build/function.obj | diff -u tests/expected/function.txt -
+	python3 compiler/assembler/cross_assembler.py build/function.obj build/function.hex >/dev/null
 clean:
 	rm -rf build bin
 

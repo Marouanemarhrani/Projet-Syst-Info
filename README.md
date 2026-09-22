@@ -28,3 +28,7 @@ Pour lancer la simulation si GHDL est installé :
     make hardware-test
 
 La checklist détaillée du sujet est disponible dans `docs/TP_CHECKLIST.md`.
+
+
+Les extensions pointeurs et fonctions sans paramètres sont également couvertes côté
+compilateur/interpréteur et disposent de tests dédiés.

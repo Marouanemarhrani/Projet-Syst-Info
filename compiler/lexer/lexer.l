@@ -14,6 +14,7 @@ NUM ([0-9]+(\.[0-9]*)?|\.[0-9]+)([eE][+-]?[0-9]+)?
 "else" {return ELSE;}
 "while" {return WHILE;}
 "printf" {return PRINTF;}
+"return" {return RETURN;}
 "==" return EQ;
 {NUM} {char*e;long v=strtol(yytext,&e,10);if(*e)v=(long)strtod(yytext,0);yylval.number=v;return NUMBER;}
 {ID} {yylval.id=strdup(yytext);return IDENTIFIER;}

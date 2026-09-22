@@ -12,3 +12,8 @@ LOAD=07, STORE=08, JMP=09, JMF=0A, INF=0B, SUP=0C, EQU=0D, PRI=0E.
 
 La synthèse FPGA et les mesures de fréquence/consommation nécessitent Vivado et une
 carte, absents de l'environnement. Les sources RTL restent simulables avec GHDL/Vivado.
+
+
+L'extension logicielle accepte aussi des fonctions sans paramètres :
+`int triple() { return 3 * 3; }`. Les opcodes CALL/RET sont compris par le compilateur
+et l'interpréteur ; leur intégration RTL reste une extension matérielle distincte.
