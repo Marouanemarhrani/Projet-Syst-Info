@@ -39,6 +39,6 @@
 
 - [x] Tests logiciel
 - [x] Programme RISC de démonstration
-- [ ] Simulation du testbench VHDL (GHDL absent dans l'environnement)
+- [x] Simulation du testbench VHDL avec GHDL
 - [x] Pointeurs côté compilateur/interpréteur/cross-assembleur
 - [x] Fonctions sans paramètres avec retour entier (extension facultative)

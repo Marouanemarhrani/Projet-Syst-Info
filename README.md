@@ -2,7 +2,7 @@
 
 Compilateur Flex/Bison d'un sous-ensemble du C vers un assembleur orienté mémoire, avec interpréteur du format numérique généré.
 
-Fonctionnalités : déclarations int/const, constantes exponentielles, expressions, affectations, comparaisons, printf, if/else, while et diagnostics de compilation.
+Fonctionnalités : déclarations int/const, constantes exponentielles, expressions, affectations, comparaisons, printf, if/else, while, pointeurs, fonctions sans paramètres et diagnostics de compilation.
 
 ## Utilisation
 
@@ -23,11 +23,13 @@ Le cross-assembleur et les sources VHDL sont dans `compiler/assembler/` et
 
     make cross
 
-Pour lancer la simulation si GHDL est installé :
+Pour lancer la simulation VHDL :
 
     make hardware-test
 
 La checklist détaillée du sujet est disponible dans `docs/TP_CHECKLIST.md`.
+
+La CI GitHub exécute automatiquement la compilation, les tests logiciels et le cross-assemblage.
 
 
 Les extensions pointeurs et fonctions sans paramètres sont également couvertes côté

@@ -1,0 +1,17 @@
+name: Software CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  software:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install toolchain
+        run: sudo apt-get update && sudo apt-get install -y gcc make flex bison python3
+      - name: Run software tests
+        run: make test
+      - name: Build cross-assembled program
+        run: make cross

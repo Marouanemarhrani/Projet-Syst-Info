@@ -27,6 +27,7 @@ test: all
 	if bin/interpreter build/division_zero.obj >/dev/null 2>&1; then echo "Une division par zéro a été acceptée"; exit 1; fi
 clean:
 	rm -rf build bin
+	rm -f *.o work-obj*.cf risc_pipeline_tb lex.yy.c
 
 cross: all
 	bin/compiler tests/fixtures/control.c build/control >/dev/null
