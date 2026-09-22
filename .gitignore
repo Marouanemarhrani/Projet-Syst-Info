@@ -35,3 +35,5 @@ bin/
 
 work-obj*.cf
 risc_pipeline_tb
+
+__pycache__/
